@@ -25,7 +25,7 @@ The second reason is that in reminding myself I hope this series will also help 
   <img src="images/Quant.png" style="width:2.13889in;height:1.55726in" /></td>
   <td><ul>
   <b>Quant Finance Series, Issue 1<b> <br>
-  <a href="https://github.com/hjstobart/Quant-Finance-Series/blob/main/QuantFinance-Issue%201.pdf">An Introduction to Options: From Plain Vanilla to Exotics</a>
+  <a href="https://github.com/hjstobart/Quant-Finance-Series/blob/main/Quant-Finance%20Issue%201.pdf">An Introduction to Options: From Plain Vanilla to Exotics</a>
   </ul></td>
   </tr>
 
