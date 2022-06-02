@@ -1,0 +1,72 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1.2in]{geometry} 
+\usepackage{amsmath}
+\usepackage{tcolorbox}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{lastpage}
+\usepackage{fancyhdr}
+\usepackage{accents}
+\usepackage{parskip}
+\usepackage{setspace}
+\usepackage{xcolor}
+\usepackage{tabularx,booktabs}
+\newcolumntype{Y}{>{\centering\arraybackslash}X}
+
+\setstretch{1.25}
+\pagestyle{fancy}
+\setlength{\headheight}{40pt}
+
+\begin{document}
+
+\lhead{Mr. \textsc{H. Stobart}} 
+\rhead{\textsc{Quant Finance Series \\ Issue 3, Mar-22}}
+\cfoot{\thepage\ of \pageref{LastPage}}
+
+\begin{tcolorbox}
+\begin{center}
+    \large
+    \textsc{An Introduction to Brownian Motion \\ or Wiener Process}
+\end{center}
+\end{tcolorbox}
+
+\begin{center}
+\textbf{Note:} \textit{This work is intended for informative and educational purposes only.}
+\end{center}
+
+\section*{1. Introduction}
+At the very centre of Quantitative Finance, underpinning almost every theory, model, or equation, is the idea of randomness. Of course, if we didn't believe there was some degree of randomness in the markets, and it was purely deterministic, then the financial world would be much simpler to model! And the chances are, the majority of things would have been described by now. Think of Physics before Quantum Mechanics, most visible phenomena had been meticulously described and captured by governing equations––even leading to Lord Kelvin's bold claim that `\textit{there is nothing new to be discovered in Physics}'.
+
+Whilst we talk about the idea of randomness, and its key role in modelling financial markets, what exactly does that mean? What is randomness and how do we incorporate it into our models in a sensible and mathematically precise way? Well, depending on your background, you perhaps already know the answer. If you're a Physicist then the word's \textit{Brownian Motion} will undoubtedly ring a bell, whilst those from a Mathematics background (with some exposure to Probability Theory and Stochastic Processes) may have heard of the very special \textit{Wiener Process}.
+
+\section*{2. A Brief History}
+In a sense, the two are used interchangeably. Brownian Motion is named after Robert Brown, a Botanist who first described the movement of pollen in molecules of water in 1827. However, it was Einstein in 1905 that really laid the mathematical foundations. Brown served to conceptually describe what was happening, but Einstein produced a mathematical model of that very same `random' movement. 
+
+The Wiener Process is named after Norbert Wiener, a mathematician who also studied and modelled the properties of Brownian Motion. The reason the Wiener Process is considered separate is because it can be viewed as more of a mathematical construct, a continuous-time stochastic process, without any pre-determined applications. As a result, it has since been applied in areas such as Physics, Economics, and even Biology. 
+
+\section*{3. Mathematical Description}
+The Wiener Process or Brownian Motion is traditionally described by the following four properties:
+\begin{enumerate}
+    \item $W_0 = 0$;
+     \item The process $W_t$ has continuous paths;
+    \item The process $W_t$ has independent increments. That is, for $ t_0 < t_1 \leq t_2 < t_3$, we have $W_{t_3} - W_{t_2}$ and $W_{t_1} - W_{t_0}$ are independent random variables;
+    \item The process has Gaussian increments. That is, for $s < t$, we have $W_t - W_s \sim \mathcal{N}(0,|t-s|)$.
+\end{enumerate}
+
+You may find in books or lecture notes, point 3. and 4. get combined and referred to as \textit{independent Gaussian increments}. I personally prefer to keep them separate. 
+
+This is, however, not the only mathematically precise way of describing the Wiener Process or Brownian Motion. We can also use the Lévy characterisation:
+\begin{enumerate}
+    \item $W_0 = 0$;
+    \item The process $W_t$ has continuous paths;
+    \item The process $W_t$ is martingale with respect to the filtration $\mathcal{F}_s$. That is, $\mathbb{E}[W_t|W_s] = W_s$;
+    \item The process $|W_t|^2 - t$ is a martingale with respect to the filtration $\mathcal{F}_s$.
+\end{enumerate}
+
+This equivalent formulation highlights the links between martingales and the Wiener Process or Brownian Motion, and is a critical starting point when considering financial applications from a martingale perspective.
+
+\section*{4. Discussion}
+The ideas of Brownian Motion or Wiener Process are essential to understanding and modelling randomness is many applications, including finance. It's a large area that draws on a great deal of other areas in mathematics, including probability theory, or more specifically random variables, stochastic processes, and martingales. 
+
+This very brief introduction is simply aimed at whetting the appetite of the reader, and hopefully serves as a reference for the properties of the process. For those looking to explore Probability Theory in general, without a formal background, I recommend the book \textit{Probability and Random Processes} by Grimmett and Stirzaker, and their associated book \textit{1000 Exercises in Probability}.
+\end{document}

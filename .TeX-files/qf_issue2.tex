@@ -1,0 +1,105 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1.2in]{geometry} 
+\usepackage{amsmath}
+\usepackage{tcolorbox}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{lastpage}
+\usepackage{fancyhdr}
+\usepackage{accents}
+\usepackage{parskip}
+\usepackage{setspace}
+\usepackage{xcolor}
+\usepackage{tabularx,booktabs}
+\newcolumntype{Y}{>{\centering\arraybackslash}X}
+
+\setstretch{1.25}
+\pagestyle{fancy}
+\setlength{\headheight}{40pt}
+
+\begin{document}
+
+\lhead{Mr. \textsc{H. Stobart}} 
+\rhead{\textsc{Quant Finance Series \\ Issue 2, Feb-22}}
+\cfoot{\thepage\ of \pageref{LastPage}}
+
+\begin{tcolorbox}
+\begin{center}
+    \large
+    \textsc{An Introduction to Options: \\ Common Strategies}
+\end{center}
+\end{tcolorbox}
+
+\begin{center}
+\textbf{Note:} \textit{This work is intended for informative and educational purposes only.}
+\end{center}
+
+\section*{1. Introduction}
+In last month's issue we looked at a wide range of different options contracts, ranging from plain vanilla to exotics. We spoke about the features each has and discussed some examples, but everything covered was purely focused on holding \textit{one} option––whichever type it may be.
+
+In this issue, I want to consider some of the common strategies that require the use of \textit{multiple} options and under which circumstances one might seek to employ them. Personally, I find the names of the strategies to be thoroughly enjoyable, although as we will see, there are reasons behind them.
+
+\section*{2. Strategies}
+In each of the following strategies we will only ever refer to plain vanilla European style call and put options.
+
+\subsection*{2.1 Covered Call}
+A covered call isn't so much of a strategy as it is the name given to a certain combination. The covered call is a combination of long the underlying and short, that is having written, a call option on that same underlying. The name implying that your ownership of the underlying acts as `cover' should the option be exercised. An option that is written without owning the underlying is said to be `naked' and is viewed as risky. 
+
+\textbf{When would I use this?} \\ 
+A covered call sells off the upside potential of your asset. This can be a great way of earning extra income if you have a strong view that the price of the underlying won't move much during the life of the option.
+
+\subsection*{2.2 Protective Put}
+Likewise, a protective put is a combination. It is made up of long the underlying and long, that is having bought, a put option on that same underlying. The name implies that your ownership of the put acts as `protection' against any downward movements in the underlying.
+
+\textbf{When would I use this?} \\ 
+A protective put essentially acts as an insurance policy against negative scenarios for your asset. It completely removes any downside risk, and keeps all of the upside potential. So why doesn't everyone just use this strategy, you might ask. Well, this is perhaps one of the most expensive strategies one can employ, and doing so may completely wipe out any profit you had to begin with!
+
+\subsection*{2.3 Bull Spread}
+A bull spread consists of buying one option and selling another with different strikes. Traditionally a bull spread is made up of two calls, so one would buy a call option with a lower strike of, say, \$100 and sell a call with a higher strike of, say, \$120. This way if price of the underlying rises, the lower call will provide a payoff, but the maximum profit will be capped once the strike of the higher call is passed.
+
+\textbf{When would I use this?} \\ 
+A bull spread is generally implemented when we have a view that the underlying will rise, i.e. in a `Bull' market, hence the name of the strategy. The reason we might sell the additional call at the higher strike could be that we have a particularly strong opinion on how far the underlying will rise and so sell above this point, or the lower strike call is too expensive to buy outright and so we subsidise its cost by selling the other call. 
+
+\subsection*{2.4 Bear Spread}
+A bear spread can be thought of as the opposite of a bull spread. That is, we buy a put option with a higher strike price of say, £60, and sell a put with a lower strike price of, say, £40. This way if the price of the underlying falls, the higher strike put will provide a payoff, but the maximum profit is capped once the underlying has fallen below the strike of the lower put. 
+
+\textbf{When would I use this?} \\ 
+A bear spread is generally implemented when we have a view that the underlying will fall, i.e. in a `Bear' market, hence the name of the strategy. The reason we might sell the additional put is conceptually identical to that of a bull spread. 
+
+It is worth noting that both Bull and Bear spreads can be made using puts or calls, however, they are more intuitively created the way we have described.
+
+\subsection*{2.5 Collar}
+A collar can be constructed by extending either a covered call or protective put with whichever option is not currently in use. That is adding a long put to a covered call combination, or alternatively writing a call option when currently holding a protective put combination. The aim is to create a band, or `collar', around the underlying such that it only allows for small movements, either upwards or downwards, producing either a modest profit or loss.
+
+\textbf{When would I use this?} \\ 
+The collar is primarily used as a hedging strategy. Suppose my ownership of the underlying has produced significant gains already and I am now worried about what might happen in the future. Then I can implement a collar strategy to essentially lock in my profit, within a certain range.
+
+A collar can also be a good strategy to reduce the cost of the protective put. If I have a strong view that the underlying might decline and I want to subsidise my purchase of a put, I can write a call option and sacrifice the upside potential. Of course, this is really just a reformulation of the above statement on hedging. 
+
+\subsection*{2.6 Straddle}
+A straddle consists of buying both a call and put option on the same underlying with the \textit{same} strike. For instance, I may buy a call and put on BP shares with strikes of £300. This will provide a payoff if the underlying moves by some sizeable amount in either direction.
+
+\textbf{When would I use this?} \\ 
+The straddle can be thought of as a view on volatility. If we believe that the market will be quite volatile over the next couple of months, either from the release of positive news, or the outcome of some negative event, but we're unsure which, we might employ a straddle. Of course, if we have the opposite view, that is, the market will remain relatively calm over the next couple of months we can write the two options and receive the premiums as income.
+
+\subsection*{2.7 Strangle}
+The strangle is almost identical to a straddle, only this time we buy a call and put option on the same underlying with \textit{different} strikes. Note, the put would require a lower strike than the call in order for this strategy to be sensible.
+
+\textbf{When would I use this?} \\ 
+Much like the bull and bear spreads, the reason for opting towards a strangle rather than a straddle is one of cost. The different strikes, usually chosen so the options are out-the-money, mean the initial capital outlay is lower than that of a straddle, where both options are traditionally at-the-money. The view on volatility remains the same.
+
+\subsection*{2.8 Calendar Spread}
+A calendar spread is an example of strategy that employs two different expiry dates. Thus far, all the strategies have used combinations of calls and puts, with potentially the same or different strikes but \textit{all with the same expiry}.
+
+The calendar spread is a strategy which aims to profit from changing market conditions. It consists of shorter dated option and a longer dated option. The exact combinations of buying and writing either calls or puts, depends on your view. For instance, writing a shorter dated call option and buying a longer dated call option will profit if there is little movement between the time of purchase and the expiry of the first option, and is then followed by an upside move before the expiry of the second option. I will leave it to the reader to imagine the other combinations. Think of buying the shorter dated and selling the longer dated for a call, and repeat for a put.
+
+\textbf{When would I use this?} \\ 
+As you might expect this strategy tends to be employed if you have a strong view on market conditions, and seek to capitalise on those views. It requires a great deal of conviction for your beliefs and a general view that it is possible to time the market. 
+
+\section*{3. Conclusion}
+In this issue, we have explored some of the most common options strategies but there are plenty more complex ones, including those which involve combinations of more calls and puts. The interested reader may find Butterflies, Condors, and Risk Reversals a good place to start. We have also neglected to include their payoff diagrams, which serve to illustrate the profit and loss for different values of the underlying. 
+
+For both of these topics there is a wealth of other resources either online or in books and academic papers––as mentioned last month, options are perhaps one of the most popular financial instruments. 
+
+
+\end{document}

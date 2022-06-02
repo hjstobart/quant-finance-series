@@ -1,0 +1,139 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1.2in]{geometry} 
+\usepackage{amsmath}
+\usepackage{tcolorbox}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{lastpage}
+\usepackage{fancyhdr}
+\usepackage{accents}
+\usepackage{parskip}
+\usepackage{setspace}
+\usepackage{xcolor}
+\usepackage{tabularx,booktabs}
+\newcolumntype{Y}{>{\centering\arraybackslash}X}
+
+\setstretch{1.25}
+\pagestyle{fancy}
+\setlength{\headheight}{40pt}
+
+\begin{document}
+
+\lhead{Mr. \textsc{H. Stobart}} 
+\rhead{\textsc{Quant Finance Series \\ Issue 6, Jun-22}}
+\cfoot{\thepage\ of \pageref{LastPage}}
+
+\begin{tcolorbox}
+\begin{center}
+    \large
+    \textsc{An Introduction to the Greeks: \\ Black-Scholes Example}
+\end{center}
+\end{tcolorbox}
+
+\begin{center}
+\textbf{Note:} \textit{This work is intended for informative and educational purposes only.}
+\end{center}
+
+\section*{1. Introduction}
+In last month's issue we saw how we could reduce the Black-Scholes PDE to the one-dimensional heat/diffusion equation. We didn't go any further than this and consider how to solve the resulting equation and obtain the closed form expressions for plain vanilla European calls and puts, instead we simply stated the results. 
+
+In practice, we are often concerned with the risk associated with our option positions. That is, we want to know how stable (or volatile) the prices we have obtained are to a shift in circumstances. Remember, financial markets are constantly changing as participants update their expectations, market outlook, and trade to alter their current positions. Another way of describing the reaction of our option prices to changing market conditions is to consider their \textit{sensitivities}, of which there are many, depending on which factor we are concerned about. Collectively these sensitivities are called: the Greeks.
+
+\section*{2. The Greeks}
+
+Before we dive into the different formulas for the Greeks, let's remind ourselves of the formulas for a call and put, under Black-Scholes,
+\begin{align}
+    d_1 &= \frac{\log (S/K) + (r + \frac{1}{2} \sigma^2)(T-t)}{\sigma \sqrt{T-t}} \\
+    d_2 &= \frac{\log (S/K) + (r - \frac{1}{2} \sigma^2)(T-t)}{\sigma \sqrt{T-t}} = d_1 - \sigma \sqrt{T-t} \\
+    N(x) &= \frac{1}{\sqrt{2 \pi}} \int_{-\infty}^{x} e^{-\frac{1}{2}y^2} dy.
+\end{align}
+
+\newpage
+
+\textbf{European Call Option}
+\begin{equation}
+    V(S,t) = SN(d_1) - Ke^{-r(T-t)}N(d_2).
+\end{equation}
+
+\textbf{European Put Option}
+\begin{equation}
+    V(S,t) = -SN(-d_1) + Ke^{-r(T-t)}N(-d_2).
+\end{equation}
+
+\subsection*{2.1 Delta}
+Our first Greek is \textbf{Delta}. This should look somewhat familiar if you've read Issue 4 of my Quantitative Finance series which derived the Black-Scholes PDE. Delta measures the rate of change of the option to changes in the underlying asset. It is perhaps one of the most important sensitivities in practice as it is used extensively in the Delta-Hedging technique (as the name might suggest). The formula will of course look familiar. 
+
+\textbf{Delta for a European Call Option}
+\begin{equation}
+    \Delta := \frac{\partial V}{\partial S} = e^{-(T-t)}N(d_1).
+\end{equation}
+
+\textbf{Delta for a European Put Option}
+\begin{equation}
+    \Delta := \frac{\partial V}{\partial S} = e^{-(T-t)}( N(d_1) - 1).
+\end{equation}
+
+\subsection*{2.2 Gamma}
+\textbf{Gamma} is the rate of change of Delta to changes in the underlying asset. Again, this is used in Delta-Hedging as it gives a clear idea of how rapidly Delta is changing and therefore how straightforward or challenging Delta-Hedging would be. There is also an extension to Gamma-Hedging, but we will omit the details here. 
+A high Gamma would indicate that Delta is changing quickly and thus true Delta-Hedging would require constant rebalancing, which may not be feasible once transaction costs are considered. 
+
+Let us briefly introduce a new term,
+\begin{equation}
+    N'(x) = \frac{1}{\sqrt{2 \pi}} e^{-\frac{1}{2}x^2}.
+\end{equation}
+
+\textbf{Gamma for a European Call Option}
+\begin{equation}
+    \Gamma := \frac{\partial^2 V}{\partial S^2} = \frac{e^{-(T-t)} N'(d_1)}{\sigma S \sqrt{T-t}}.
+\end{equation}
+
+\textbf{Gamma for a European Put Option}
+\begin{equation}
+    \Gamma := \frac{\partial^2 V}{\partial S^2} = \frac{e^{-(T-t)} N'(d_1)}{\sigma S \sqrt{T-t}}.
+\end{equation}
+
+\subsection*{2.3 Theta}
+The Greek related to the time value of an option is \textbf{Theta}. This measures the sensitivity of the option to the passage of time. Due to the time value of money, an option with a greater amount of time until expiry will be worth more than one with a shorter time, all else equal. Intuitively this makes sense as there is more chance of \textit{something} happening during the life of the longer dated option. 
+
+\textbf{Theta for a European Call Option}
+\begin{equation}
+    \Theta := \frac{\partial V}{\partial t} = -\frac{\sigma S e^{-(T-t)} N'(d_1)}{2 \sqrt{T-t}} + DSe^{-(T-t)} N(d_1) - rKe^{-r(T-t)} N(d_2).
+\end{equation}
+
+\textbf{Theta for a European Put Option}
+\begin{equation}
+    \Theta := \frac{\partial V}{\partial t} = -\frac{\sigma S e^{-(T-t)} N'(-d_1)}{2 \sqrt{T-t}} - DSe^{-(T-t)} N(-d_1) + rKe^{-r(T-t)} N(-d_2).
+\end{equation}
+
+\subsection*{2.4 Rho}
+The sensitivity of the option to changes in the underlying risk-free interest rate, $r$, is called \textbf{Rho}.
+
+\textbf{Rho for a European Call Option}
+\begin{equation}
+    \rho := \frac{\partial V}{\partial r} = K(T-t)e^{-r(T-t)} N(d_2).
+\end{equation}
+
+\textbf{Rho for a European Put Option}
+\begin{equation}
+    \rho := \frac{\partial V}{\partial r} = -K(T-t)e^{-r(T-t)} N(-d_2).
+\end{equation}
+
+\subsection*{2.5 Vega}
+\textbf{Vega} is a very special Greek. It measures the sensitivity of the option to changes in the volatility. However, if you happen to have a Greek friend, or just know someone with a knowledge of the Greek language, I suggest you ask them about the letter \textit{Vega}. Spoiler, it doesn't exist! 
+
+In addition, in the Black-Scholes world volatility, $\sigma$, is defined to be a constant. So the derivative with respect to a constant doesn't make sense. Ignoring these challenges for now, we can produce a formula for Vega.
+
+\textbf{Vega for a European Call Option}
+\begin{equation}
+    \mathcal{V} := \frac{\partial V}{\partial \sigma} = S(T-t) e^{-(T-t)} N'(d_1).
+\end{equation}
+
+\textbf{Vega for a European Put Option}
+\begin{equation}
+    \mathcal{V} := \frac{\partial V}{\partial \sigma} = S(T-t) e^{-(T-t)} N'(d_1).
+\end{equation}
+
+\section*{3. Discussion}
+In this issue we have looked at some of the most well known Greeks, however, this only scratches the surface of the topic. Our Greeks, with the exception of Gamma, are all classed as \textit{first order}, but there are second and even third order Greeks which can be obtained by taking the respective derivatives. Of course, the more derivatives that are taken the more complicated the formula becomes. The interested reader should consult the Wikipedia page on Greeks (finance) which has the formulas for plain vanilla European calls and puts for every Greek. 
+
+\end{document}

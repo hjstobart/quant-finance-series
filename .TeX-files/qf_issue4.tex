@@ -1,0 +1,134 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1.2in]{geometry} 
+\usepackage{amsmath}
+\usepackage{tcolorbox}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{lastpage}
+\usepackage{fancyhdr}
+\usepackage{accents}
+\usepackage{parskip}
+\usepackage{setspace}
+\usepackage{xcolor}
+\usepackage{tabularx,booktabs}
+\newcolumntype{Y}{>{\centering\arraybackslash}X}
+
+\setstretch{1.25}
+\pagestyle{fancy}
+\setlength{\headheight}{40pt}
+
+\begin{document}
+
+\lhead{Mr. \textsc{H. Stobart}} 
+\rhead{\textsc{Quant Finance Series \\ Issue 4, Apr-22}}
+\cfoot{\thepage\ of \pageref{LastPage}}
+
+\begin{tcolorbox}
+\begin{center}
+    \large
+    \textsc{Derivation of the Black-Scholes \\ Partial Differential Equation}
+\end{center}
+\end{tcolorbox}
+
+\begin{center}
+\textbf{Note:} \textit{This work is intended for informative and educational purposes only.}
+\end{center}
+
+\section*{1. Introduction}
+If you have ever heard anyone talk about Quantitative Finance, or perhaps even discussed derivatives as part of a general finance course then you will most likely have come across the term Black-Scholes. The Black-Scholes PDE is possibly one of the most famous mathematical finance results in existence, earning a place in general popular science. 
+
+In this issue we will examine \textit{one} of the ways to derive the Black-Scholes PDE. I emphasise the word one because it turns out there are many ways to derive it––even leading to an article entitled \textit{Ten Ways to Derive the Black-Scholes Equation}. To do so we will make use of the Taylor expansion approach courtesy of Paul Wilmott.
+
+As a reminder, the Black-Scholes PDE is (mostly) used to find the closed-form solution for a European Option Price. Our parameters are as follows:
+\begin{itemize}
+    \item $S$, the underlying stock price variable.
+    \item $t$, the time. 
+    \item $V(S,t)$, the value of the option.
+    \item $r$, the risk-free rate.
+    \item $\mu$, the drift of our random walk.
+    \item $\sigma$, the volatility. 
+\end{itemize}
+
+\section*{2. Derivation}
+
+\subsubsection*{2.1 The Stock Price SDE}
+We begin with the Log-Normal Random Walk, the most widely accepted SDE for modelling stock prices,
+\begin{equation}
+    dS = \mu S dt + \sigma S dW_t.
+\end{equation}
+Where $\mu, \sigma \in \mathbb{R}$ and $W_t$ is a standard Wiener Process.
+
+\subsubsection*{2.2 Construction of the Portfolio}
+Now let us set up a special portfolio constructed by going long the option we are trying to price, and short an amount, $\Delta$, of the underlying stock. 
+\begin{equation}
+    \Pi(S,t) = V(S,t) - \Delta S.  
+\end{equation}
+
+At this point we must make an assumption. Let us suppose that across each time-step, $dt$, we can fix our value of $\Delta$. Then we can write the change in our portfolio as,
+\begin{equation}
+    d\Pi = dV - \Delta dS.
+\end{equation}
+
+\subsubsection*{2.3 The Change in the Option Value}
+Let's take a look at the $dV$ term in (3), this is the point where we use a `trick' relating Taylor Series and Itô's Lemma.
+
+\begin{equation}
+    V(S+dS, t+dt) = V(S,t) + \frac{\partial V}{\partial t} dt + \frac{\partial V}{\partial S} dS + \frac{1}{2} \frac{\partial^2 V}{\partial S^2} dS^2 + \ldots
+\end{equation}
+Where we have expanded up to first order in time and second order in our stock price variable. By taking $V(S,t)$ to the left-hand side those two terms combine to form $dV$. But let's look at what's multiplying the derivative terms.
+
+There is nothing to be done to $dt$, so we leave it as is. But doesn't $dS$ look familiar, didn't we define that elsewhere? The answer is yes! That is the same $dS$ defined by (1). What about $dS^2$? Well, it just so happens that any multiplication with a higher order than $dt$, is zero, and that $dW_{t}^{2}$ can be rewritten as $dt$.
+
+Putting these results together, and subbing into (4), we find that:
+\begin{equation}
+    dV = \left( \frac{\partial V}{\partial t} + \frac{1}{2} \sigma^2 S^2 \frac{\partial^2 V}{\partial S^2} \right) dt + \frac{\partial V}{\partial S} dS. 
+\end{equation}
+
+\subsubsection*{2.4 The Change in the Portfolio}
+Now that we have an expression for $dV$, we can return to the change in our portfolio. Inputting (5) for $dV$ we find,
+\begin{equation}
+    d\Pi = \left( \frac{\partial V}{\partial t} + \frac{1}{2} \sigma^2 S^2 \frac{\partial^2 V}{\partial S^2} \right) dt + \frac{\partial V}{\partial S} dS - \Delta dS.
+\end{equation}
+
+For a moment, let's consider what $dS$ is contributing to our portfolio. We know from (1) it contains a deterministic part and a random part. Wouldn't it be great if there was a way to `turn off' that random component so that we're only left with the deterministic terms in $dt$? Well, with a careful choice of $\Delta$ we can! If we set,
+\begin{equation}
+    \Delta = \frac{\partial V}{\partial S},
+\end{equation}
+then we can cancel the last two terms in (6) to obtain,
+\begin{equation}
+    d\Pi = \left( \frac{\partial V}{\partial t} + \frac{1}{2} \sigma^2 S^2 \frac{\partial^2 V}{\partial S^2} \right) dt.
+\end{equation}
+
+\subsubsection*{2.5 No Arbitrage}
+What is arbitrage? It can essentially be thought of as riskless profit. Consider a world where we can not only buy items from a supermarket, but sell them back as well. That is, you can go to Tesco and buy a box of Cornflakes for £2 or, if you already own a box of Cornflakes, you can sell your box to Tesco for £2.
+
+You walk down the street and take a look in Sainsbury's, it just so happens that they're also buying and selling the same Cornflakes, just at £2.50. This represents an \textit{arbitrage opportunity}. You can walk back to Tesco, buy all of their Cornflakes at £2 each, take them down the street to Sainsbury's and sell them for £2.50 each. You've made a riskless profit.
+
+Returning to our scenario, if we've eliminated the random component, then surely there is no risk left in our portfolio. We know exactly what we will get at some time in the future. Under the assumption of no arbitrage then, we find that this \textbf{must} be worth the same as money in the bank. So we can write that,
+\begin{equation}
+    d\Pi = r \Pi dt.
+\end{equation}
+This simply represents the initial value of our portfolio $\Pi$ earning compound interest at the risk free interest rate, $r$.
+
+\subsubsection*{2.6 The Black-Scholes Equation}
+Equating (8) and (9),
+\begin{equation}
+    \left( \frac{\partial V}{\partial t} + \frac{1}{2} \sigma^2 S^2 \frac{\partial^2 V}{\partial S^2} \right) dt = r \Pi dt.
+\end{equation}
+But we know what $\Pi$ and subsequently $\Delta$ are from (2) and (7) respectively. So we can write,
+\begin{equation}
+    \left( \frac{\partial V}{\partial t} + \frac{1}{2} \sigma^2 S^2 \frac{\partial^2 V}{\partial S^2} \right) dt = r \left( V - S \frac{\partial V}{\partial S} \right) dt.
+\end{equation}
+Which dropping the $dt$ dependence and rearranging ultimately gives the \\ \textbf{Black-Scholes Equation}:
+\begin{equation}
+    \frac{\partial V}{\partial t} + \frac{1}{2} \sigma^2 S^2 \frac{\partial^2 V}{\partial S^2} + rS \frac{\partial V}{\partial S} - rV = 0.    
+\end{equation}
+
+\section*{3. Discussion}
+Whilst the Black-Scholes Equation has become incredibly famous over the years, there are a number of unrealistic assumptions that lay challenge to this model. We do not go into details here, instead the interested reader will easily find an in-depth discussion of the assumptions online.
+
+As mentioned this approach to the derivation of Black-Scholes is based on the method presented by Paul Wilmott in his book, \textit{Paul Wilmott on Quantitative Finance}––I personally find these books incredibly useful and still use them extensively. 
+
+
+
+\end{document}

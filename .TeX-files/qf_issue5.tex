@@ -1,0 +1,145 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1.2in]{geometry} 
+\usepackage{amsmath}
+\usepackage{tcolorbox}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{lastpage}
+\usepackage{fancyhdr}
+\usepackage{accents}
+\usepackage{parskip}
+\usepackage{setspace}
+\usepackage{xcolor}
+\usepackage{tabularx,booktabs}
+\newcolumntype{Y}{>{\centering\arraybackslash}X}
+
+\setstretch{1.25}
+\pagestyle{fancy}
+\setlength{\headheight}{40pt}
+
+\begin{document}
+
+\lhead{Mr. \textsc{H. Stobart}} 
+\rhead{\textsc{Quant Finance Series \\ Issue 5, May-22}}
+\cfoot{\thepage\ of \pageref{LastPage}}
+
+\begin{tcolorbox}
+\begin{center}
+    \large
+    \textsc{Reduction of the Black-Scholes PDE \\ to the 1-D Heat/Diffusion Equation}
+\end{center}
+\end{tcolorbox}
+
+\begin{center}
+\textbf{Note:} \textit{This work is intended for informative and educational purposes only.}
+\end{center}
+
+\section*{1. Introduction}
+In last month's issue we saw how the famous Black-Scholes Partial Differential Equation was derived. That's great, but of course we knew that wasn't the end, we now need to go ahead and solve it. But how would we go about doing that? Well, as I've stressed so far, the Black-Scholes Equation has a number of fantastic properties that allow us to do all sorts of useful things––one of which is reducing the PDE we currently have, to the one-dimensional heat or diffusion equation through a series of clever transformations. That is precisely what I want to cover in this issue.
+
+\section*{2. Method}
+Let's remind ourselves what we currently have. The \textbf{Black-Scholes PDE} is given by:
+\begin{equation}
+    \frac{\partial V}{\partial t} + \frac{1}{2} \sigma^2 S^2 \frac{\partial^2 V}{\partial S^2} + rS \frac{\partial V}{\partial S} - rV = 0.    
+\end{equation}
+
+We begin with the first of our transformations,
+\begin{equation}
+    V(S,t) = e^{-r(T-t)} U(S,t).
+\end{equation}
+
+Differentiating we obtain,
+\begin{align}
+    \frac{\partial V}{\partial t} &= r e^{-r(T-t)} U(S,t) + e^{-r(T-t)} \frac{\partial U(S,t)}{\partial t} \\
+    \frac{\partial V}{\partial S} &= e^{-r(T-t)} \frac{\partial U(S,t)}{\partial S} \\
+    \frac{\partial^2 V}{\partial S^2} &= e^{-r(T-t)} \frac{\partial^2 U(S,t)}{\partial S^2}
+\end{align}
+
+As we can see, the additional non-derivative term in (3) will cancel with the $rV$ term in (1). We can also cancel through the $e^{-r(T-t)}$ since it appears everywhere. This leaves us with a new equation in terms of $U(S,t)$:
+\begin{equation}
+    \frac{\partial U}{\partial t} + \frac{1}{2} \sigma^2 S^2 \frac{\partial^2 U}{\partial S^2} + rS \frac{\partial U}{\partial S} = 0.    
+\end{equation}
+
+Next we make a minor modification to the time variable. Why don't we rewrite our equation in terms of the variable, \textit{time to maturity}, so
+\begin{equation}
+    \tau = T - t.
+\end{equation}
+
+This time we only need to differentiate with respect to $t$, since that is the only element that will change,
+\begin{equation}
+    \frac{\partial U}{\partial t} = -\frac{\partial U}{\partial \tau}.
+\end{equation}
+
+This means we can move the $\tau$ derivative to the other side of our expression. So far we have:
+\begin{equation}
+    \frac{\partial U}{\partial \tau} = \frac{1}{2} \sigma^2 S^2 \frac{\partial^2 U}{\partial S^2} + rS \frac{\partial U}{\partial S}.    
+\end{equation}
+
+Now, we know that we tend to work with log prices rather than direct prices, so let's introduce a new variable,
+\begin{equation}
+    \eta = \log (S).
+\end{equation}
+
+Differentiating using the chain rule we find,
+\begin{align}
+    \frac{\partial}{\partial S} &= \frac{\partial \eta}{\partial S} \frac{\partial}{\partial \eta} = e^{-\eta} \frac{\partial}{\partial \eta} \\
+    \frac{\partial^2}{\partial S^2} &= e^{-2\eta} \frac{\partial^2}{\partial \eta^2} - e^{-2\eta} \frac{\partial}{\partial \eta}.
+\end{align}
+
+Which transforms our PDE into:
+\begin{equation}
+    \frac{\partial U}{\partial \tau} = \frac{1}{2} \sigma^2 \frac{\partial^2 U}{\partial \eta^2} + \left(r - \frac{1}{2} \sigma^2 \right) \frac{\partial U}{\partial \eta}.    
+\end{equation}
+
+Now there is one final, and perhaps mysterious, step. We consider a new solution which is a combination of the variables we have introduced,
+\begin{equation}
+    U = u(x,\tau') 
+\end{equation}
+Where,
+\begin{equation}
+    x = \eta + \left( r - \frac{1}{2} \sigma^2 \right) \tau'
+\end{equation}
+and
+\begin{equation}
+    \tau = \tau'.
+\end{equation}
+
+Differentiating again using the chain rule, we find,
+\begin{align}
+    \frac{\partial}{\partial \tau} &= \frac{\partial}{\partial \tau'} + \left( r - \frac{1}{2} \sigma^2 \right) \frac{\partial}{\partial x} \\
+    \frac{\partial}{\partial \eta} &= \frac{\partial}{\partial x} \\
+    \frac{\partial^2}{\partial \eta^2} &= \frac{\partial^2}{\partial x^2}.
+\end{align}
+
+Similarly, we can see that the extra term in (16) will cancel with our first derivative with respect to $\eta$ term in (13). This final step means that we have arrived at our intended position, the \textbf{One-Dimensional Heat/Diffusion Equation}:
+\begin{equation}
+    \frac{\partial u}{\partial \tau'} = \frac{1}{2} \sigma^2 \frac{\partial^2 u}{\partial x^2}.     
+\end{equation}
+
+\section*{3. Solution}
+There are many methods for solving the one-dimensional heat/diffusion equation, however, I will not cover them here. One of the methods, separation of variables, will be covered in a later issue of my Mathematics/Statistics series, so one option is to wait until then. Alternatively, the interested reader can conduct further research and look into the separation of variables solution, the Fourier transform solution, or the similarity reduction solution, all of which are notoriously well documented.
+
+Of course, once (19) has been solved there is then the task of undoing all the transformations to return to our original option price function $V(S,t)$. I present the solution for both calls and puts below.
+
+\newpage
+
+\textbf{Common Terminology}
+\begin{align}
+    d_1 &= \frac{\log (S/K) + (r + \frac{1}{2} \sigma^2)(T-t)}{\sigma \sqrt{T-t}} \\
+    d_2 &= \frac{\log (S/K) + (r - \frac{1}{2} \sigma^2)(T-t)}{\sigma \sqrt{T-t}} = d_1 - \sigma \sqrt{T-t} \\
+    N(x) &= \frac{1}{\sqrt{2 \pi}} \int_{-\infty}^{x} e^{-\frac{1}{2}y^2} dy.
+\end{align}
+
+\textbf{European Call Option}
+\begin{equation}
+    V(S,t) = SN(d_1) - Ke^{-r(T-t)}N(d_2).
+\end{equation}
+
+\textbf{European Put Option}
+\begin{equation}
+    V(S,t) = -SN(-d_1) + Ke^{-r(T-t)}N(-d_2).
+\end{equation}
+
+
+\end{document}
+
