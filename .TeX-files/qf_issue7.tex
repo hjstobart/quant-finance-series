@@ -1,0 +1,126 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1.2in]{geometry} 
+\usepackage{amsmath}
+\usepackage{tcolorbox}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{lastpage}
+\usepackage{fancyhdr}
+\usepackage{accents}
+\usepackage{parskip}
+\usepackage{setspace}
+\usepackage{xcolor}
+\usepackage{tabularx,booktabs}
+\newcolumntype{Y}{>{\centering\arraybackslash}X}
+
+\setstretch{1.25}
+\pagestyle{fancy}
+\setlength{\headheight}{40pt}
+
+\begin{document}
+
+\lhead{Mr. \textsc{H. Stobart}} 
+\rhead{\textsc{Quant Finance Series \\ Issue 7, Jul-22}}
+\cfoot{\thepage\ of \pageref{LastPage}}
+
+\begin{tcolorbox}
+\begin{center}
+    \large
+    \textsc{Implied Volatility \\ and Jäckel's Approach}
+\end{center}
+\end{tcolorbox}
+
+\begin{center}
+\textbf{Note:} \textit{This work is intended for informative and educational purposes only.}
+\end{center}
+
+\section*{1. Introduction}
+In the last couple of issues we have focused our attention on computing the price and sensitivities of options using the Black-Scholes equation. Whilst the model itself has many incredibly useful properties and results, its underlying assumptions leave a lot to be desired. For instance, they imagine a world with no transaction costs, no taxes, and constant risk-free interest rate and volatility parameters. 
+
+In reality, of course, the risk-free interest rate is not constant, but depending on length of time before the option's expiry date, this can be less of a concern. What causes major problems, however, is the constant volatility assumption. 
+
+If I asked you to draw the path of a stock price, what would you draw? The chances are you would draw some jagged line, moving upwards and downwards, possibly with an upwards trend. That describes pretty much any stock price graph, right? Well, how jagged you drew your graph is related the level of volatility of that stock––does that look constant?
+
+In practice, the Black-Scholes formula is used for initial calibration of new models (to check that your model correctly computes the price of plain vanilla European calls and puts) and computing the \textit{implied volatility} of options currently trading. That is, based on the option prices we can observe in the market, we can compute the consensus level of volatility the market expects. To do so we invert the formulas for calls and puts we have seen previously, and make $\sigma$, our volatility, the subject. 
+
+\section*{2. Implied Volatility}
+Let's first remind ourselves of the formulas for plain vanilla European calls and puts. We present a slightly modified, but equivalent, version of what we have previously seen which captures both calls and puts in one. 
+
+\newpage
+
+\textbf{Value of a European Option} 
+\begin{equation}
+    V = e^{-rT} \theta \left\{F \Phi\left[\theta \left( \frac{\log\frac{F}{K}}{\sigma\sqrt{T}} + \frac{1}{2} \sigma\sqrt{T} \right)     \right] - K \Phi\left[\theta \left( \frac{\log\frac{F}{K}}{\sigma\sqrt{T}} - \frac{1}{2} \sigma\sqrt{T} \right) \right] \right\}
+\end{equation}
+
+Where $F := S_0 e^{(r-d)T}$, and $\theta = \pm 1$ for a call and put respectively.
+
+As we can see the volatility parameter, $\sigma$ is present in the right hand side of (1). We assume that everything else is observable so we can simply write,
+\begin{equation}
+    V = f(\sigma).
+\end{equation}
+
+To solve this kind of problem we require an initial guess and an iterative scheme. For those that studied maths at school, you may recall the \textit{Newton-Raphson} method does exactly that, and hence is what we would use in this situation. 
+
+Choose an initial starting point $\sigma_0 \in \mathbb{R}^+$,
+\begin{equation}
+    \sigma_{n+1} = \sigma_n - \frac{f(\sigma_n) - V}{f'(\sigma_n)}.
+\end{equation}
+
+\section*{3. Jäckel's Equivalent Form}
+So far we have only considered how to compute the implied volatility using the Black-Scholes option pricing formula from a general perspective, that is, in terms of the function $f(\sigma)$ and its derivative $f'(\sigma)$. In truth, computing the derivative of the function $f(\sigma)$ in its current form is quite challenging. As a result, Jäckel proposed an alternative form, by means of transformations, which make our lives much easier.
+
+\textbf{Jäckel's First Transformations}
+\begin{align}
+    a &:= \log(\frac{F}{K}) \\
+    b &:= \frac{Ve^{rT}}{\sqrt{FK}} \\
+    \hat{\sigma} &:= \sigma \sqrt{T}.
+\end{align}
+
+\newpage
+
+This means we can rewrite (2) as,
+\begin{equation}
+    b = h(\hat{\sigma}). 
+\end{equation} 
+
+Where,
+\begin{equation}
+    h(\hat{\sigma}) := \theta e^{\frac{a}{2}} \Phi \left[\theta \left( \frac{a}{\hat{\sigma}} + \frac{\hat{\sigma}}{2} \right) \right] - \theta e^{-\frac{a}{2}} \Phi \left[\theta \left( \frac{a}{\hat{\sigma}} - \frac{\hat{\sigma}}{2} \right) \right].
+\end{equation}
+
+Thus our iterative solution (3) becomes,
+\begin{align}
+    \hat{\sigma}_{n+1} &= \hat{\sigma}_n - \frac{h(\hat{\sigma}_n) - b}{h'(\hat{\sigma}_n)} \\
+    &= \hat{\sigma}_n - \sqrt{2\pi}\exp \left[ \frac{1}{2} \left( \frac{a^2}{\hat{\sigma}_{n}^{2}} + \frac{\hat{\sigma}_{n}^{2}}{4} \right) \right] (h(\hat{\sigma}_n) - b).
+\end{align}
+
+This makes things much easier to write and understand from a computational perspective.
+
+\section*{4. Jäckel's Modification}
+Jäckel did not stop there with his equivalent form, instead he took things further to consider another alternative, namely Jäckel's modification. This builds on the result from the previous section, and introduces a further term.
+
+\begin{equation}
+    \tau := 2 \theta \mathcal{H}(\theta a) \sinh \left(\frac{a}{2} \right).
+\end{equation}
+
+where, $\mathcal{H}(x)$ is the Heaviside step function. 
+
+By subtracting the function $\tau$ from both sides of the equivalent form (7), we can now solve (on a logarithmic scale) the equation,
+\begin{equation}
+    \log \left( \frac{h(\hat{\sigma}) - \tau}{b - \tau} \right) = 0.
+\end{equation}
+
+As a result, the Newton-Raphson scheme becomes,
+\begin{align}
+    \hat{\sigma}_{n+1} &= \hat{\sigma}_n - \frac{h(\hat{\sigma}_n) - \tau}{h'(\hat{\sigma}_n)} \log \left( \frac{h(\hat{\sigma}) - \tau}{b - \tau} \right) \\
+    &= \hat{\sigma}_n - \sqrt{2\pi}\exp \left[ \frac{1}{2} \left( \frac{a^2}{\hat{\sigma}_{n}^{2}} + \frac{\hat{\sigma}_{n}^{2}}{4} \right) \right] (h(\hat{\sigma}_n) - \tau) \log \left( \frac{h(\hat{\sigma}) - \tau}{b - \tau} \right).
+\end{align}
+
+\section*{5. Discussion}
+The subtleties between the two methods are largely academic and relate the differences in convergence regions in both the real and complex plane. For a more in-depth analysis of Jäckel's results and their applications to implied volatility I refer the reader to the paper: \textit{Stability of calibration
+procedures: fractals in the Black-Scholes model}; (Y. Cui, S. del Baño Rollin, G. Germano).
+
+Overall, the importance of implied volatility cannot be understated and is widely used in practice. It gives a good indication of market sentiment in the short, medium, and long-term. We have explored two of many approaches, and I would recommend the reader try and implement these in his or her preferred programming language. Start with a simple implementation of the Newton-Raphson scheme and then proceed to swap the arguments with those formulas listed in this issue. 
+
+\end{document}
