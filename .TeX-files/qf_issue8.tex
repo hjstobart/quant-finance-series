@@ -1,0 +1,162 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1.2in]{geometry} 
+\usepackage{amsmath}
+\usepackage{tcolorbox}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{lastpage}
+\usepackage{fancyhdr}
+\usepackage{accents}
+\usepackage{parskip}
+\usepackage{setspace}
+\usepackage{xcolor}
+\usepackage{tabularx,booktabs}
+\newcolumntype{Y}{>{\centering\arraybackslash}X}
+\newcommand\ddfrac[2]{\frac{\displaystyle #1}{\displaystyle #2}}
+
+\setstretch{1.25}
+\pagestyle{fancy}
+\setlength{\headheight}{40pt}
+
+\begin{document}
+
+\lhead{Mr. \textsc{H. Stobart}} 
+\rhead{\textsc{Quant Finance Series \\ Issue 8, Aug-22}}
+\cfoot{\thepage\ of \pageref{LastPage}}
+
+\begin{tcolorbox}
+\begin{center}
+    \large
+    \textsc{Derivation of the One-Factor Interest Rate \\ Partial Differential Equation}
+\end{center}
+\end{tcolorbox}
+
+\begin{center}
+\textbf{Note:} \textit{This work is intended for informative and educational purposes only.}
+\end{center}
+
+\section*{1. Introduction}
+Back in April's issue we saw how to derive the Black-Scholes Partial Differential Equation. We began with the log-normal random walk––regarded as the most appropriate stochastic differential equation for modelling a great deal of asset classes, one of which is equities––and constructed a special portfolio to hedge our option.
+
+As it turns out, this approach can be used to derive the partial differential equation for many different asset classes, and can even be extended to consider a more complicated (and therefore realistic) world in which the prices of underlying assets depend on multiple factors.
+
+In this issue, I want to derive the so called \textit{Bond Pricing Equation}, that is, the partial differential equation used to price bonds when we consider interest rates to be stochastic. It will proceed much like before, but with a few small but important differences. 
+
+\section*{2. Derivation}
+\subsubsection*{2.1 The Interest Rate SDE}
+We begin with the stochastic differential equation for the evolution of interest rates.
+\begin{equation}
+    dr = u(r,t)dt + w(r,t)dW_t.
+\end{equation}
+Notice that we are keeping things general by using the functions $u(r,t)$ and $w(r,t)$. The explicit form of these functions depends on the model being chosen. 
+
+\subsubsection*{2.2 Construction of the Portfolio}
+Let's think about what we are trying to price: a Bond. We will denote the value of that bond $V(r,t)$ just as before. Unfortunately, in trying to price a bond we encounter a problem. In the Black-Scholes derivation we were seeking the price of an option, whose underlying was a stock––something that can be observed in the market, and bought and sold. What about a bond? Well, the bond is the object we are trying to price and the underlying is now the interest rate. But this isn't an asset. It isn't something that we simply buy and sell to construct our hedged portfolio.
+
+Instead, we must hedge our bond with another, different, bond. Let us denote the prices of the different bonds, $V_{1}(r,t)$ and $V_{2}(r,t)$. Now we can construct our portfolio,
+\begin{equation}
+    \Pi(r,t) =  V_{1}(r,t) - \Delta V_{2}(r,t). 
+\end{equation}
+
+As before we will make the assumption that we can fix $\Delta$ across each time-step. Then we can write the change in our portfolio as,
+\begin{equation}
+    d\Pi(r,t) =  dV_{1}(r,t) -  \Delta dV_{2}(r,t). 
+\end{equation}
+
+\subsubsection*{2.3 The Change in the Bond Value}
+Let's take a look at the $dV_1$ term in (3). Once again, we will use the `trick' relating Taylor Series and Itô's Lemma courtesy of Paul Wilmott.
+\begin{equation}
+    V_{1}(r+dr, t+dt) = V_{1}(r,t) + \frac{\partial V_{1}}{\partial t} dt + \frac{\partial V_{1}}{\partial r} dr + \frac{1}{2} w^2 \frac{\partial^2 V_{1}}{\partial r^2} dr^2 + \ldots
+\end{equation}
+
+Where we have expanded up to first order in time and second order in our interest rate variable. By taking $V(r,t)$ to the left-hand side those two terms combine to form $dV_{1}$. But let's look at what's multiplying the derivative terms.
+
+There is nothing to be done to $dt$, so we leave it as is, but $dr$ is of course familiar. That is the same $dr$ defined by (1). What about $dr^2$? As before, any multiplication with a higher order than $dt$, is zero, and that $dW_{t}^{2}$ can be rewritten as $dt$.
+
+Putting these results together, and subbing into (4), we find that:
+\begin{equation}
+    dV_{1} = \left( \frac{\partial V_{1}}{\partial t} + \frac{1}{2} w^2 \frac{\partial^2 V_{1}}{\partial r^2} \right) dt + \frac{\partial V_{1}}{\partial r} dr. 
+\end{equation}
+
+\subsubsection*{2.4 The Change in the Portfolio}
+
+Repeating the analysis with $V_{2}$ we obtain the same result just with $V_{2}$ replacing $V_{1}$. So subbing the results back into (3) we obtain
+\begin{equation}
+    d\Pi = \left[ \left( \frac{\partial V_{1}}{\partial t} + \frac{1}{2} w^2 \frac{\partial^2 V_{1}}{\partial r^2} \right) dt + \frac{\partial V_{1}}{\partial r} dr \right] - \Delta \left[ \left( \frac{\partial V_{2}}{\partial t} + \frac{1}{2} w^2 \frac{\partial^2 V_{2}}{\partial r^2} \right) dt + \frac{\partial V_{2}}{\partial r} dr \right].
+\end{equation}
+
+\newpage
+
+To establish a hedged portfolio, we need to eliminate risk. Our risky terms are those being multiplied by the term $dr$. So we need to find the value of $\Delta$ such that,
+\begin{equation}
+    \frac{\partial V_{1}}{\partial r} - \Delta \frac{\partial V_{2}}{\partial r} dr = 0.
+\end{equation}
+Hence,
+\begin{equation}
+    \Delta = \ddfrac{\frac{\partial V_{1}}{\partial r}}{\frac{\partial V_{2}}{\partial r}}
+\end{equation}
+
+Which gives our deterministic portfolio,
+\begin{equation}
+    d\Pi = \left[ \frac{\partial V_{1}}{\partial t} + \frac{1}{2} w^2 \frac{\partial^2 V_{1}}{\partial r^2} - \left( \ddfrac{\frac{\partial V_{1}}{\partial r}}{\frac{\partial V_{2}}{\partial r}} \right) \left( \frac{\partial V_{2}}{\partial t} + \frac{1}{2} w^2 \frac{\partial^2 V_{2}}{\partial r^2} \right) \right] dt
+\end{equation}
+
+\subsubsection*{2.5 No Arbitrage}
+Of course, we know that if something is riskless then the concept of no arbitrage applied. This means that,
+\begin{align}
+    d\Pi &= r \Pi dt \\
+    &= r \left[ V_{1} - \left( \ddfrac{\frac{\partial V_{1}}{\partial r}}{\frac{\partial V_{2}}{\partial r}} \right) V_{2} \right] dt. 
+\end{align}
+
+\subsubsection*{2.6 Separation of $V_1$ and $V_2$}
+Equating (9) and (11) we see that we have made some steps towards the derivation of the PDE, but we are not quite there. For one thing, we still have both $V_1$ and $V_2$. 
+\begin{equation}
+    \left[ \frac{\partial V_{1}}{\partial t} + \frac{1}{2} w^2 \frac{\partial^2 V_{1}}{\partial r^2} - \left( \ddfrac{\frac{\partial V_{1}}{\partial r}}{\frac{\partial V_{2}}{\partial r}} \right) \left( \frac{\partial V_{2}}{\partial t} + \frac{1}{2} w^2 \frac{\partial^2 V_{2}}{\partial r^2} \right) \right] = r \left[ V_{1} - \left( \ddfrac{\frac{\partial V_{1}}{\partial r}}{\frac{\partial V_{2}}{\partial r}} \right) V_{2} \right]
+\end{equation}
+
+Fortunately for us, we can actually separate (12) and group all the $V_1$ terms on one side and all the $V_2$ terms on the other. This gives,
+\begin{equation}
+    \ddfrac{\frac{\partial V_{1}}{\partial t} + \frac{1}{2} w^2 \frac{\partial^2 V_{1}}{\partial r^2} - rV_{1}}{\frac{\partial V_{1}}{\partial r}} = \ddfrac{\frac{\partial V_{2}}{\partial t} + \frac{1}{2} w^2 \frac{\partial^2 V_{2}}{\partial r^2} - rV_{2}}{\frac{\partial V_{2}}{\partial r}}.
+\end{equation}
+
+For this to be the case, we must have that both sides are independent of the maturity of the bonds used and is thus equal to some unknown function.
+\begin{equation}
+    \ddfrac{\frac{\partial V}{\partial t} + \frac{1}{2} w^2 \frac{\partial^2 V}{\partial r^2} - rV}{\frac{\partial V}{\partial r}} = f(r,t).
+\end{equation}
+
+\subsubsection*{2.7 The function $f(r,t)$}
+To understand how we find the function $f(r,t)$ let's take a step back and consider a completely unhedged bond. Then by using Itô in a similar manner we find that,
+\begin{equation}
+    dV = \left( \frac{\partial V}{\partial t} + u \frac{\partial V}{\partial r} + \frac{1}{2} w^2 \frac{\partial^2 V}{\partial r^2} \right) dt + w \frac{\partial V}{\partial r} dW_t. 
+\end{equation}
+
+Consider (11) when we are unhedged, i.e. $\Delta=0$. This means, as always, we can equate our $dt$ terms to find,
+\begin{equation}
+    \frac{\partial V}{\partial t} + u \frac{\partial V}{\partial r} + \frac{1}{2} w^2 \frac{\partial^2 V}{\partial r^2} \equiv rV + \lambda w \frac{\partial V}{\partial r}.
+\end{equation}
+For some function $\lambda = \lambda(r,t)$.
+
+Now by substituting the right hand side of (16) in (15), we can rearrange to obtain, 
+\begin{equation}
+    dV - rVdt = w \frac{\partial V}{\partial r} (dW_t + \lambda dt). 
+\end{equation}
+
+So how do we interpret this? Well, in what we have just done $dV$ is now the return on our unhedged (and therefore risky) bond, while $rVdt$ is the risk free return. The fact that these two are different values represents the acceptance and bearing of risk that \textit{we expect to be compensated for}. This means that the function $\lambda$ is the \textit{market price of risk}, that is, the excess return above the risk free rate ($\lambda dt$) for each unit of risk ($dW_t$).
+
+\subsubsection*{2.8 Bond Pricing Equation}
+Returning to our Bond Pricing Equation, the arguments in section 2.7 mean that we can write our function,
+\begin{equation}
+    f(r,t) = -u(r,t) + \lambda(r,t) w(r,t).
+\end{equation}
+
+Using (18) and rearranging (14) gives us our final \textbf{Bond Pricing Equation}
+\begin{equation}
+    \frac{\partial V}{\partial t} + \frac{1}{2} w^2 \frac{\partial^2 V}{\partial r^2} + (u - \lambda w) \frac{\partial V}{\partial r} - rV = 0.
+\end{equation}
+
+\section*{3. Discussion}
+The Bond Pricing Equation can be extended to consider multiple factors. As one would expect the results become more complex and require knowledge of Linear Algebra and computational techniques to solve. As such they are beyond the scope of this series and I will not be covering them. The interested reader is free to perform his or her own research. The benefits of introducing multiple factors to the Bond Pricing Equation is that it allows for the capture of more subtle features present in the real world, for instance the different behaviour of short, medium, and long term interest rates. 
+
+As for the Black-Scholes derivation, this method is based on that presented by Paul Wilmott in his book, \textit{Paul Wilmott on Quantitative Finance}––I personally find these books incredibly useful and still use them extensively. 
+
+\end{document}
