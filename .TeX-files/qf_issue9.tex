@@ -1,0 +1,150 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1.2in]{geometry} 
+\usepackage{amsmath}
+\usepackage{tcolorbox}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{lastpage}
+\usepackage{fancyhdr}
+\usepackage{accents}
+\usepackage{parskip}
+\usepackage{setspace}
+\usepackage{xcolor}
+\usepackage{tabularx,booktabs}
+\newcolumntype{Y}{>{\centering\arraybackslash}X}
+
+\setstretch{1.25}
+\pagestyle{fancy}
+\setlength{\headheight}{40pt}
+
+\begin{document}
+
+\lhead{Mr. \textsc{H. Stobart}} 
+\rhead{\textsc{Quant Finance Series \\ Issue 9, Sep-22}}
+\cfoot{\thepage\ of \pageref{LastPage}}
+
+\begin{tcolorbox}
+\begin{center}
+    \large
+    \textsc{Solving the One-Factor Interest Rate PDE: \\ Ho \& Lee}
+\end{center}
+\end{tcolorbox}
+
+\begin{center}
+\textbf{Note:} \textit{This work is intended for informative and educational purposes only.}
+\end{center}
+
+\section*{1. Introduction}
+In last month's issue we derived the one-factor interest rate partial differential equation, otherwise known as the Bond Pricing Equation. However, as mentioned, we derived its general form––that is, our final PDE included arbitrary functions, $u(r,t)$, $w(r,t)$, and $\lambda(r,t)$. 
+
+Over the years, there have been many models proposed by various academics and practitioners each with their own specified functions in place of these generic forms. Naturally, the each have their advantages and disadvantages, and often the challenge is finding the balance between how closely the model matches reality and the ease with which we can solve it. Over the coming couple of months I want to present and subsequently solve some of the simpler models, starting in this issue with that of \textit{Ho \& Lee}.
+
+\section*{2. Setup}
+As a reminder we start with our underlying stochastic differential equation governing the interest rate,
+\begin{equation}
+    dr = u(r,t)dt + w(r,t)dW_t.
+\end{equation}
+
+Which leads us to our one-factor \textbf{Bond Pricing Equation},
+\begin{equation}
+    \frac{\partial V}{\partial t} + \frac{1}{2} w^2 \frac{\partial^2 V}{\partial r^2} + (u - \lambda w) \frac{\partial V}{\partial r} - rV = 0.
+\end{equation}
+
+Before we proceed, however, it is important to introduce some new terminology.
+
+We shall denote the value of our bond (which we will assume to be zero coupon) as
+\begin{equation}
+    Z(r,t;T).
+\end{equation}
+Where $Z$ depends on both $r$ and $t$, while the parameter $T$ is simply included to indicate the maturity of the bond at time $T$.
+
+Furthermore, what makes the models I will be discussing so special is that they all have solution of one particular form. The solution is given by,
+\begin{equation}
+    Z(r,t;T) = \exp \left[A(t;T) - r B(t;T) \right].
+\end{equation}
+Where $A(t;T)$ and $B(t;T)$ are functions to be found––and will be specific to the model we are considering. We call a solution of this type an \textbf{Affine Solution}.
+
+In the model proposed by Ho \& Lee, the functions were
+\begin{align}
+    u(r,t) - \lambda(r,t) w(r,t) &= \eta(t) \\
+    w(r,t) &= \sqrt{\sigma}.
+\end{align}
+Where $\sigma \in \mathbb{R}$. And the final condition is,
+\begin{equation}
+    Z(r,T;T) = 1.
+\end{equation}
+That is, at maturity the bond pays a par of 1.
+
+\section*{3. Solution}
+Let's now find our solution. We begin by substituting the forms given by (5) and (6) into our BPE (2) to obtain,
+\begin{equation}
+    \frac{\partial V}{\partial t} + \frac{1}{2} \sigma \frac{\partial^2 V}{\partial r^2} + \eta(t) \frac{\partial V}{\partial r} - rV = 0.
+\end{equation}
+
+Let's compute the derivatives of our unknown solution (4) and substitute them into (). We have,
+\begin{align}
+    \frac{\partial V}{\partial t} &= \left( \frac{\partial A}{\partial t} - r \frac{\partial B}{\partial t} \right) \exp ( A - rB) \\
+    \frac{\partial V}{\partial r} &= -B \exp (A - rB) \\
+    \frac{\partial^2 V}{\partial r^2} &= B^2 \exp (A-rB).
+\end{align}
+
+Substituting these into our equation we get,
+\begin{multline}
+    \left( \frac{\partial A}{\partial t} - r \frac{\partial B}{\partial t} \right) \exp ( A - rB) + \frac{1}{2} \sigma B^2 \exp (A-rB) \\ - \eta(t) B \exp (A - rB) - r \exp (A - rB) = 0.
+\end{multline}
+
+This makes the equation look quite long and unappealing, but notice that $\exp (A - rB)$ is a common factor. As a result, we can divide through and cancel all those terms. In the interest of clarity, we can also rewrite the right hand side in a different way. Our equation simplifies to,
+\begin{equation}
+    \frac{\partial A}{\partial t} - r \frac{\partial B}{\partial t}  + \frac{1}{2} \sigma B^2 - \eta(t) B - r = 0 + 0r.
+\end{equation}
+
+By writing $0 + 0r$, we can group the terms on the left hand side of (12) into those that are multiplied by $r$ and those that aren't. This will then give us two \textit{ordinary differential equations} to solve.
+\begin{equation}
+    \left( \frac{\partial A}{\partial t} + \frac{1}{2} \sigma B^2 - \eta(t) B \right) + r \left( -\frac{\partial B}{\partial t} - 1 \right) = 0 + 0r. 
+\end{equation}
+
+Hence, we have
+\begin{align}
+    \frac{dB}{dt} &= - 1 \\
+    \frac{dA}{dt} &= \eta(t) B - \frac{1}{2} \sigma B^2.
+\end{align}
+
+Finally, we need to convert our final condition from $Z(r,T;T)$ to $A(T)$ and $B(T)$. This is simple enough as for $Z$ to equal 1, we must have that both $A(T) = B(T) = 0$.
+
+Let's solve for $B(t)$ first.
+\begin{align}
+\frac{dB}{dt} &= - 1 \\[10pt]
+\int_{t}^{T} 1 dB &= \int_{t}^{T} -1 dt \\[10pt]
+B(T) - B(t) &= -(T-t) \\[10pt]
+-B(t) &= -(T-t) \\[10pt]
+B(t) &= (T-t).
+\end{align}
+That was straightforward!
+
+\newpage
+
+Now let's tackle $A(t)$.
+\begin{align}
+    \frac{dA}{dt} &= \eta(t) B - \frac{1}{2} \sigma B^2\\[10pt]
+    \frac{dA}{dt} &= \eta(t) (T-t) - \frac{1}{2} \sigma (T-t)^2 \\[10pt]
+    \int_{t}^{T} 1 dA &= \int_{t}^{T} \eta(\tau) (T- \tau d\tau - \frac{1}{2} \sigma \int_{t}^{T} (T-\tau)^2 d\tau \\[10pt]
+    A(T) - A(t) &= \int_{t}^{T} \eta(\tau) (T-\tau) d\tau - \frac{1}{2} \sigma \left[ \frac{1}{3} (T- \tau)^3 \right]_{t}^{T} \\[10pt]
+    -A(t) &= \int_{t}^{T} \eta(\tau) (T-\tau) d\tau - \frac{1}{6} \sigma (T-t)^3 \\[10pt]
+    A(t) &= - \int_{t}^{T} \eta(\tau) (T-\tau) d\tau + \frac{1}{6} \sigma (T-t)^3.
+\end{align}
+
+Hence, we arrive out our full solution.
+\begin{equation}
+    Z(r,t;T) = \exp \left[ A(t;T) - r B(t;T) \right]
+\end{equation}
+Where,
+\begin{equation}
+    B(t) = (T-t).
+\end{equation}
+and
+\begin{equation}
+    A(t) = - \int_{t}^{T} \eta(\tau) (T-\tau) d\tau + \frac{1}{6} \sigma (T-t)^3.
+\end{equation}
+
+
+\end{document}
