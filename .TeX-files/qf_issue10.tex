@@ -1,0 +1,148 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1.2in]{geometry} 
+\usepackage{amsmath}
+\usepackage{tcolorbox}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{lastpage}
+\usepackage{fancyhdr}
+\usepackage{accents}
+\usepackage{parskip}
+\usepackage{setspace}
+\usepackage{xcolor}
+\usepackage{tabularx,booktabs}
+\newcolumntype{Y}{>{\centering\arraybackslash}X}
+
+\setstretch{1.25}
+\pagestyle{fancy}
+\setlength{\headheight}{40pt}
+
+\begin{document}
+
+\lhead{Mr. \textsc{H. Stobart}} 
+\rhead{\textsc{Quant Finance Series \\ Issue 10, Oct-22}}
+\cfoot{\thepage\ of \pageref{LastPage}}
+
+\begin{tcolorbox}
+\begin{center}
+    \large
+    \textsc{Solving the One-Factor Interest Rate PDE: \\ Vasicek}
+\end{center}
+\end{tcolorbox}
+
+\begin{center}
+\textbf{Note:} \textit{This work is intended for informative and educational purposes only.}
+\end{center}
+
+\section*{1. Introduction}
+In this month's issue we continue solving the one-factor interest rate partial differential equation, this time considering the model proposed by \textit{Vasicek}.
+
+\section*{2. Setup}
+As before we have our underlying stochastic differential equation governing the interest rate,
+\begin{equation}
+    dr = u(r,t)dt + w(r,t)dW_t.
+\end{equation}
+
+Likewise, we have our one-factor \textbf{Bond Pricing Equation},
+\begin{equation}
+    \frac{\partial Z}{\partial t} + \frac{1}{2} w^2 \frac{\partial^2 Z}{\partial r^2} + (u - \lambda w) \frac{\partial Z}{\partial r} - rZ = 0.
+\end{equation}
+
+In this model, Vasicek took the following functions,
+\begin{align}
+    u(r,t) - \lambda(r,t) w(r,t) &= a - b r \\
+    w(r,t) &= \sqrt{c}.
+\end{align}
+Where $a,b, c \in \mathbb{R}$. And the final condition is,
+\begin{equation}
+    Z(r,T;T) = 1.
+\end{equation}
+That is, at maturity the bond pays a par of 1.
+
+\section*{3. Solution}
+As we saw in last month's issue for the solution of the Ho \& Lee model, we can search for an \textit{affine solution} of the form,
+\begin{equation}
+    Z(r,t;T) = \exp \left[ A(t;T) - r B(t;T) \right].
+\end{equation}
+
+Substituting the forms given by (3) and (4) into our BPE (2) we obtain,
+\begin{equation}
+    \frac{\partial Z}{\partial t} + \frac{1}{2} c \frac{\partial^2 Z}{\partial r^2} + (a - b r) \frac{\partial Z}{\partial r} - rZ = 0.
+\end{equation}
+
+Let's compute the derivatives of our unknown solution (6) and substitute them into (7). We have,
+\begin{align}
+    \frac{\partial V}{\partial t} &= \left( \frac{\partial A}{\partial t} - r \frac{\partial B}{\partial t} \right) \exp ( A - rB) \\
+    \frac{\partial V}{\partial r} &= -B \exp (A - rB) \\
+    \frac{\partial^2 V}{\partial r^2} &= B^2 \exp (A-rB).
+\end{align}
+
+Substituting these into our equation we get,
+\begin{multline}
+    \left( \frac{\partial A}{\partial t} - r \frac{\partial B}{\partial t} \right) \exp ( A - rB) + \frac{1}{2} c B^2 \exp (A-rB) \\ - a B \exp (A - rB) + b r B \exp (A - rB) - r \exp (A - rB) = 0.
+\end{multline}
+
+Again, this is a long and unpleasant expression, but notice that $\exp (A - rB)$ is multiplying every term in the equation. We can cancel through once more and, in the interest of clarity, we can also rewrite the right hand side in a different way. Our equation simplifies to,
+\begin{equation}
+    \frac{\partial A}{\partial t} - r \frac{\partial B}{\partial t}  + \frac{1}{2} c B^2 - a B + b r B - r = 0 + 0r.
+\end{equation}
+
+By writing $0 + 0r$, we can group the terms on the left hand side of (12) into those that are multiplied by $r$ and those that aren't. This will then give us two \textit{ordinary differential equations} to solve.
+\begin{equation}
+    \left( \frac{\partial A}{\partial t} + \frac{1}{2} c B^2 - a B \right) + r \left( -\frac{\partial B}{\partial t}  + b B - 1 \right) = 0 + 0r. 
+\end{equation}
+
+Hence, we have
+\begin{align}
+    \frac{dB}{dt} &= (bB - 1) \\
+    \frac{dA}{dt} &= a B - \frac{1}{2} c B^2.
+\end{align}
+
+Finally, we need to convert our final condition from $Z(r,T;T)$ to $A(T)$ and $B(T)$. This is simple enough as for $Z$ to equal 1, we must have that both $A(T) = B(T) = 0$.
+
+Let's solve for $B(t)$ first.
+\begin{align}
+\frac{dB}{dt} &= (bB - 1) \\[10pt]
+\int_{t}^{T} \frac{1}{bB - 1} dB &= \int_{t}^{T} 1 dt \\[10pt]
+\left[ \frac{1}{b} \ln |b B(t) - 1| \right]_{t}^{T} &= (T-t) \\[10pt]
+\ln | b B(T) - 1 | - \ln | b B(t) - 1 | &= b(T-t) \\[10pt]
+\ln \left| \frac{ b B(T) - 1}{b B(t) - 1}\right| &= b (T-t) \\[10pt]
+\ln \left| \frac{ -1 }{b B(t) - 1}\right| &= b (T-t) \\[10pt]
+\ln | 1 - b B(t) |^{-1} &= b (T-t) \\[10pt]
+-\ln | 1 - b B(t) | &= b (T-t) \\[10pt]
+1 - b B(t) &= e^{-b (T-t)} \\[10pt]
+B(t) &= \frac{1}{b} (1 - e^{-b (T-t)}).
+\end{align}
+
+\newpage
+
+Now let's tackle $A(t)$.
+\begin{align}
+    \frac{dA}{dt} &= a B - \frac{1}{2} c B^2\\[10pt]
+    \frac{dA}{dt} &= a \frac{1}{b} \left[ 1 - e^{-\gamma(T-t)} \right] - \frac{1}{2} \frac{c}{b^2} \left[ 1 - e^{-\gamma(T-t)} \right]^2 \\[10pt]
+    \frac{dA}{dt} &= \frac{a}{b} \left[ 1 - e^{-\gamma(T-t)} \right] - \frac{c}{2 b^2} \left[ 1 - 2e^{-b(T-t)} + e^{-2 b (T-t)} \right] \\[10pt]
+    \int_{t}^{T} 1 dA &= \frac{a}{b} \int_{t}^{T} \left[ 1 - e^{-b(T-\tau)} \right] d\tau - \frac{c}{2b^2} \int_{t}^{T} \left[ 1 - 2e^{-b (T-\tau)} + e^{-2 b (T-\tau)} \right] d\tau \\[10pt]
+    A(T) - A(t) &= \frac{a}{b}\left[ (T-t) - \frac{1}{b}\left( 1 - e^{-b(T-t)}\right) \right] \\ & - \frac{c}{2b^2} \left( (T-t)  -2 \left[ \frac{1}{b} e^{-b (T-\tau)} \right]_{t}^{T} + \frac{1}{2b} \left[ e^{-2b (T-\tau)} \right]_{t}^{T} \right) \\[10pt]
+    -A(t) &= \frac{a}{b}\left[ (T-t) - B(t) \right] - \frac{c}{2b^2} \left( (T-t) + \left[ \frac{2}{b} - \frac{2}{b} e^{-b(T-t)} \right] + \left[  \frac{1}{2b} - \frac{1}{2b} e^{-2b (T-t)} \right] \right) \\[10pt]
+    A(t) &=  \frac{a}{b}\left[ B(t) - (T-t) \right] + \frac{c}{2b^2} \left( (T-t) + \left[ \frac{2}{b} - \frac{2}{b} e^{-b(T-t)} \right] + \left[  \frac{1}{2b} - \frac{1}{2b} e^{-2b (T-t)} \right] \right).
+\end{align}
+
+As it turns out, we can show (after a lot of algebra...) that the expression $A(t)$ can be written in a neater form
+\begin{equation}
+    A(t) = \frac{1}{b^2} \left[ B(t;T) - (T-t) \right] \left[ ab - \frac{1}{2} c \right] - \frac{c B(t;T)^2}{4b}.
+\end{equation}
+
+Hence, we arrive out our full solution.
+\begin{equation}
+    Z(r,t;T) = \exp \left[ A(t;T) - r B(t;T) \right]
+\end{equation}
+Where,
+\begin{equation}
+    B(t;T) = \frac{1}{b} (1 - e^{-b (T-t)}).
+\end{equation}
+and
+\begin{equation}
+    A(t;T) = \frac{1}{b^2} \left[ B(t;T) - (T-t) \right] \left[ ab - \frac{1}{2} c \right] - \frac{c B(t;T)^2}{4b}.
+\end{equation}
+
+\end{document}
