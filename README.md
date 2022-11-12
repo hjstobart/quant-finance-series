@@ -6,7 +6,7 @@
 
 Can't remember the difference between an Asian and Bermudan Option? What about how to price them? Perhaps you're just interested in learning more about some Quantitative Finance topics? Well this series is here to help!
 
-`** The Oct-22 issue is now live, check it out. **`
+`** The Nov-22 issue is now live, check it out. **`
 
 ## Overview
 
@@ -19,6 +19,15 @@ The second reason is that in reminding myself I hope this series will also help 
 ## Contents
   <table>
   <tbody>
+
+  <tr class="odd">
+  <td align="center" valign="center"> 
+  <img src="images/Quant.png" style="width:2.13889in;height:1.55726in" /></td>
+  <td align="left" valign="center"><ul>
+  <b>Issue 11, November 2022<b> <br>
+  <a href="https://github.com/hjstobart/quant-finance-series/blob/main/qf_issue11.pdf">Solving the One-Factor Interest Rate PDE: Extended Hull & White</a>
+  </ul></td>
+  </tr>
 
   <tr class="odd">
   <td align="center" valign="center"> 
