@@ -24,6 +24,15 @@ The second reason is that in reminding myself I hope this series will also help 
   <td align="center" valign="center"> 
   <img src="images/Quant.png" style="width:2.13889in;height:1.55726in" /></td>
   <td align="left" valign="center"><ul>
+  <b>Issue 12, December 2022<b> <br>
+  <a href="https://github.com/hjstobart/quant-finance-series/blob/main/qf_issue12.pdf">An Introduction to Jump Processes: Merton & Kou Jump Diffusion</a>
+  </ul></td>
+  </tr>
+
+  <tr class="odd">
+  <td align="center" valign="center"> 
+  <img src="images/Quant.png" style="width:2.13889in;height:1.55726in" /></td>
+  <td align="left" valign="center"><ul>
   <b>Issue 11, November 2022<b> <br>
   <a href="https://github.com/hjstobart/quant-finance-series/blob/main/qf_issue11.pdf">Solving the One-Factor Interest Rate PDE: Extended Hull & White</a>
   </ul></td>
