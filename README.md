@@ -6,8 +6,6 @@
 
 Can't remember the difference between an Asian and Bermudan Option? What about how to price them? Perhaps you're just interested in learning more about some Quantitative Finance topics? Well this series is here to help!
 
-`** The Nov-22 issue is now live, check it out. **`
-
 ## Overview
 
 This series contains reviews, guides, and examples of variety of different Quantitative Finance topics. My aim is to publish one per month. As with the majority of my repositories, there are two reasons for its creation.
